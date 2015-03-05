@@ -1,0 +1,117 @@
+package com.app.stopwatch;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+
+public class TimerService extends Service {
+	// actions service can perform
+	public static final String UPDATE_TIME = "com.app.stopwatch.action.UPDATE_TIME";
+	public static final String STOP_UPDATE_TIME = "com.app.stopwatch.action.STOP_UPDATE_TIME";
+	
+	// broadcaster
+	private LocalBroadcastManager broadcaster;
+	
+	// parameter for avoiding multiple requests
+	private String lastRequest;
+
+	// internal parameters
+	private long startTime;
+	private long timeCount;
+	private long totalTime;
+	
+	// handler and runnable
+	private Handler timerHandler;
+	private Runnable timer;
+	
+	public TimerService() {
+		broadcaster = LocalBroadcastManager.getInstance(this);
+		lastRequest = "";
+			
+		startTime = 0;
+		timeCount = 0;
+		totalTime = 0;
+		
+		timerHandler = new Handler();
+		timer = new Runnable() {
+			@Override
+			public void run() {
+				// record current time
+	            timeCount ++; 
+	            
+	            // calculate seconds, minutes
+	            int oneTenthSeconds = (int)(totalTime);
+	            int seconds = oneTenthSeconds / 100;
+	            int minutes = seconds / 60;
+	            int hours = minutes / 60;
+	            oneTenthSeconds = oneTenthSeconds % 100;
+	            seconds = seconds % 60;
+	            minutes = minutes % 60;
+	            hours = hours % 24;
+	            
+	            // format the output
+	            String output = "";
+	            if (hours < 10) {
+	            	output += "0"+String.valueOf(hours)+":";
+	            }
+	            else {
+	            	output += String.valueOf(hours)+":";
+	            }
+	            if (minutes < 10) {
+	            	output += "0"+String.valueOf(minutes)+":";
+	            }
+	            else {
+	            	output += String.valueOf(minutes)+":";
+	            }
+	            if (seconds < 10) {
+	            	output += "0"+String.valueOf(seconds)+".";
+	            }
+	            else {
+	            	output += String.valueOf(seconds)+".";
+	            }
+	            if (oneTenthSeconds < 10) {
+	            	output += "0"+String.valueOf(oneTenthSeconds);
+	            }
+	            else {
+	            	output += String.valueOf(oneTenthSeconds);
+	            }
+	            
+	            // send broadcast
+	            Intent intent = new Intent();
+	            intent.setAction(MainActivity.UPDATE_UI);
+	            intent.putExtra("time", output);
+	            broadcaster.sendBroadcast(intent);
+	            
+	            timerHandler.postDelayed(this, 10);
+			}
+		};
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		return null;
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (intent != null && !intent.getAction().equals(lastRequest)) {
+			String action = intent.getAction();
+			
+			if (action.equals(UPDATE_TIME)) {
+				startTime = Long.parseLong(intent.getStringExtra("currentTime"));
+				timerHandler.postDelayed(timer, 0);
+			}
+			else if (action.equals(STOP_UPDATE_TIME)) {
+				timerHandler.removeCallbacks(timer);
+				totalTime += timeCount;
+			}
+		}
+		
+		return START_NOT_STICKY;
+	}
+
+
+	
+}

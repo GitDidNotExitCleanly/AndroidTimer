@@ -20,6 +20,10 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 	
+	public final static String UPDATE_UI = "com.app.stopwatch.action.UPDATE_UI";
+	public final static String RESET_ALL = "com.app.stopwatch.action.RESET_ALL";
+	public final static String RESET_LAPTIME = "com.app.stopwatch.action.RESET_LAPTIME";
+	
 	private BroadcastReceiver receiver;
 	
 	private TextView largeTime;
@@ -27,20 +31,6 @@ public class MainActivity extends ActionBarActivity {
 	
 	private Button start_stop;
 	private Button reset_lap;
-	
-	
-	private TimerService service = null;
-	private ServiceConnection conn = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder binder) {
-			service = ((TimerService.TimerBinder)binder).getService();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			service = null;
-		}
-	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +43,6 @@ public class MainActivity extends ActionBarActivity {
 		// create broadcast receiver
 		createBroadcastReceiver();
 		
-		// bind service
-		Intent intent = new Intent(this,TimerService.class);
-		bindService(intent,conn,Service.BIND_AUTO_CREATE);
 	}
 	
 	private void setupUI() {
@@ -70,15 +57,23 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				String btnText = start_stop.getText().toString();
 				if (btnText.equals("Start")) {
+					// start service
+					Intent intent = new Intent(MainActivity.this,TimerService.class);
+					intent.setAction(TimerService.UPDATE_TIME);
+					startService(intent);
 					
-					
+					// change button
 					start_stop.setText("Stop");
-					reset_lap.setClickable(true);
+					reset_lap.setEnabled(true);
 					reset_lap.setText("Lap");
 				}
 				else {
+					// start service
+					Intent intent = new Intent(MainActivity.this,TimerService.class);
+					intent.setAction(TimerService.STOP_UPDATE_TIME);
+					startService(intent);
 					
-					
+					// change button
 					start_stop.setText("Start");
 					reset_lap.setText("Reset");
 				}
@@ -86,18 +81,26 @@ public class MainActivity extends ActionBarActivity {
 		});
 		
 		reset_lap = (Button)findViewById(R.id.reset_lap);
+		reset_lap.setEnabled(false);
 		reset_lap.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				String btnText = reset_lap.getText().toString();
 				if (btnText.equals("Reset")) {
+					// start service
+					Intent intent = new Intent(MainActivity.this,TimerService.class);
+					intent.setAction(TimerService.RESET_TIME);
+					startService(intent);
 					
-					reset_lap.setClickable(false);
+					// change button
+					reset_lap.setEnabled(false);
 				}
 				else {
-					
-					
+					// start service
+					Intent intent = new Intent(MainActivity.this,TimerService.class);
+					intent.setAction(TimerService.LAP);
+					startService(intent);
 				}
 			}
 		});
@@ -108,19 +111,41 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onReceive(Context ctx, Intent intent) {
 				
+				String action = intent.getAction();
+				
+				if (action.equals(MainActivity.UPDATE_UI)) {
+					String totalTime = intent.getStringExtra("totalTime");
+					largeTime.setText(totalTime);
+					
+					String lapTime = intent.getStringExtra("lapTime");
+					smallTime.setText(lapTime);
+				}
+				else {
+					if (action.equals(MainActivity.RESET_ALL)) {
+						largeTime.setText("00:00.0");
+						smallTime.setText("00:00.0");
+					}
+					else {
+						smallTime.setText("00:00.0");
+					}
+				}
 			}
 		};
 	}
 	
 	protected void onDestroy() {
-		if (service != null) {
-			unbindService(conn);
-		}
+		super.onDestroy();
+		Intent intent = new Intent(this,TimerService.class);
+		stopService(intent);
 	}
 	
 	protected void onStart() {
 		super.onStart();
-		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(TimerService.UPDATE_TIME));
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(UPDATE_UI);
+		intentFilter.addAction(RESET_ALL);
+		intentFilter.addAction(RESET_LAPTIME);
+		LocalBroadcastManager.getInstance(this).registerReceiver(receiver,intentFilter);
 	}
 	
 	protected void onStop() {

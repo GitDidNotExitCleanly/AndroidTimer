@@ -24,10 +24,6 @@
         </activity>
 
         <service
-            android:name=".TimerIntentService"
-            android:exported="false" >
-        </service>
-        <service
             android:name=".TimerService"
             android:enabled="true"
             android:exported="false" >

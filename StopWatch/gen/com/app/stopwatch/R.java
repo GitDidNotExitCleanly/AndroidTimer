@@ -1652,7 +1652,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f090046;
+        public static final int action_settings=0x7f090048;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
@@ -1672,9 +1672,10 @@ containing a value of this type.
         public static final int icon=0x7f090026;
         public static final int ifRoom=0x7f090016;
         public static final int image=0x7f090023;
+        public static final int index=0x7f090046;
+        public static final int lapTime=0x7f090047;
         public static final int largeTime=0x7f090041;
         public static final int listMode=0x7f09000a;
-        public static final int listView1=0x7f090045;
         public static final int list_item=0x7f090025;
         public static final int middle=0x7f09001d;
         public static final int never=0x7f090017;
@@ -1703,6 +1704,7 @@ containing a value of this type.
         public static final int start_stop=0x7f090043;
         public static final int submit_area=0x7f09003c;
         public static final int tabMode=0x7f09000c;
+        public static final int timeList=0x7f090045;
         public static final int title=0x7f090027;
         public static final int up=0x7f090001;
         public static final int useLogo=0x7f090013;
@@ -1760,6 +1762,7 @@ containing a value of this type.
         public static final int abc_simple_dropdown_hint=0x7f030016;
         public static final int activity_main=0x7f030017;
         public static final int support_simple_spinner_dropdown_item=0x7f030018;
+        public static final int timer_list_item=0x7f030019;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;

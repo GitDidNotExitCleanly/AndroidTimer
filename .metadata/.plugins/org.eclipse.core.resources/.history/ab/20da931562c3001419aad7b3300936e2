@@ -1,0 +1,127 @@
+package com.app.stopwatch;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+
+public class TimerService extends Service {
+	// actions service can perform
+	public static final String UPDATE_TIME = "com.app.stopwatch.action.UPDATE_TIME";
+	public static final String STOP_UPDATE_TIME = "com.app.stopwatch.action.STOP_UPDATE_TIME";
+	public static final String RESET_TIME = "com.app.stopwatch.action.RESET_TIME";
+	public static final String LAP = "com.app.stopwatch.action.LAP";
+	
+	// broadcaster
+	private LocalBroadcastManager broadcaster;
+	
+	// parameter for avoiding multiple requests
+	private String lastRequest;
+
+	// internal parameters
+	private long totalTime;
+	private long lapTime;
+	
+	// handler and runnable
+	private Handler timerHandler;
+	private Runnable timer;
+	
+	public TimerService() {
+		broadcaster = LocalBroadcastManager.getInstance(this);
+		lastRequest = "";
+			
+		totalTime = 0;
+		lapTime = 0;
+		
+		timerHandler = new Handler();
+		timer = new Runnable() {
+			@Override
+			public void run() {
+				// tick
+	            totalTime ++;
+	            lapTime ++;
+	            
+	            // format output
+	            String total_output = formatTime(totalTime);
+	            String lap_output = formatTime(lapTime);
+	            
+	            // send broadcast
+	            Intent intent = new Intent();
+	            intent.setAction(MainActivity.UPDATE_UI);
+	            intent.putExtra("totalTime", total_output);
+	            intent.putExtra("lapTime", lap_output);
+	            broadcaster.sendBroadcast(intent);
+	            
+	            timerHandler.postDelayed(this, 100);
+			}
+		};
+	}
+	
+	private String formatTime(long time) {
+		 int oneTenthSeconds = (int)time;
+         int seconds = oneTenthSeconds / 10;
+         int minutes = seconds / 60;
+         int hours = minutes / 60;
+         oneTenthSeconds = oneTenthSeconds % 10;
+         seconds = seconds % 60;
+         minutes = minutes % 60;
+         hours = hours % 24;
+         
+         // format the output
+         String output = "";
+         if (hours == 0) {}
+         else if (hours < 10) {
+         	output += "0"+String.valueOf(hours)+":";
+         }
+         else {
+         	output += String.valueOf(hours)+":";
+         }
+         if (minutes < 10) {
+         	output += "0"+String.valueOf(minutes)+":";
+         }
+         else {
+         	output += String.valueOf(minutes)+":";
+         }
+         if (seconds < 10) {
+         	output += "0"+String.valueOf(seconds)+".";
+         }
+         else {
+         	output += String.valueOf(seconds)+".";
+         }
+         output += String.valueOf(oneTenthSeconds);
+         
+         return output;
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		return null;
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (intent != null && !intent.getAction().equals(lastRequest)) {
+			String action = intent.getAction();
+			
+			if (action.equals(UPDATE_TIME)) {
+				timerHandler.postDelayed(timer, 0);
+			}
+			else if (action.equals(STOP_UPDATE_TIME)) {
+				timerHandler.removeCallbacks(timer);
+			}
+			else if (action.equals(RESET_TIME)) {
+				totalTime = 0;
+				lapTime = 0;
+		        broadcaster.sendBroadcast(new Intent().setAction(MainActivity.RESET_ALL));
+			}
+			else {
+				broadcaster.sendBroadcast(new Intent().setAction(MainActivity.RESET_LAPTIME).putExtra("lapTime", formatTime(lapTime)));
+				lapTime = 0;
+			}
+		}
+		
+		return START_NOT_STICKY;
+	}
+
+}

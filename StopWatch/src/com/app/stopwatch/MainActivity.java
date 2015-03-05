@@ -2,35 +2,38 @@ package com.app.stopwatch;
 
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 	
+	// broadcast receiver required action
 	public final static String UPDATE_UI = "com.app.stopwatch.action.UPDATE_UI";
 	public final static String RESET_ALL = "com.app.stopwatch.action.RESET_ALL";
 	public final static String RESET_LAPTIME = "com.app.stopwatch.action.RESET_LAPTIME";
 	
+	// local broadcast receiver
 	private BroadcastReceiver receiver;
 	
+	// widgets
 	private TextView largeTime;
 	private TextView smallTime;
 	
 	private Button start_stop;
 	private Button reset_lap;
+	
+	private ListView listView;
+	private TimerAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +45,15 @@ public class MainActivity extends ActionBarActivity {
 		
 		// create broadcast receiver
 		createBroadcastReceiver();
-		
 	}
 	
 	private void setupUI() {
 		
+		// textview
 		largeTime = (TextView)findViewById(R.id.largeTime);
 		smallTime = (TextView)findViewById(R.id.smallTime);
 		
+		// start/stop button
 		start_stop = (Button)findViewById(R.id.start_stop);
 		start_stop.setOnClickListener(new OnClickListener() {
 
@@ -75,11 +79,13 @@ public class MainActivity extends ActionBarActivity {
 					
 					// change button
 					start_stop.setText("Start");
+					reset_lap.setEnabled(true);
 					reset_lap.setText("Reset");
 				}
 			}
 		});
 		
+		// reset/lap button
 		reset_lap = (Button)findViewById(R.id.reset_lap);
 		reset_lap.setEnabled(false);
 		reset_lap.setOnClickListener(new OnClickListener() {
@@ -98,14 +104,26 @@ public class MainActivity extends ActionBarActivity {
 				}
 				else {
 					// start service
-					Intent intent = new Intent(MainActivity.this,TimerService.class);
-					intent.setAction(TimerService.LAP);
-					startService(intent);
+					if (adapter.getCount() < 20) {
+						Intent intent = new Intent(MainActivity.this,TimerService.class);
+						intent.setAction(TimerService.LAP);
+						startService(intent);
+						
+						if (adapter.getCount() == 19) {
+							reset_lap.setEnabled(false);
+						}
+					}
 				}
 			}
 		});
+		
+		// listview
+		listView = (ListView)findViewById(R.id.timeList);
+		adapter = new TimerAdapter(this);
+		listView.setAdapter(adapter);
 	}
 	
+	// update time
 	private void createBroadcastReceiver() {
 		receiver = new BroadcastReceiver() {
 			@Override
@@ -124,21 +142,26 @@ public class MainActivity extends ActionBarActivity {
 					if (action.equals(MainActivity.RESET_ALL)) {
 						largeTime.setText("00:00.0");
 						smallTime.setText("00:00.0");
+						adapter.clearTime();
 					}
 					else {
 						smallTime.setText("00:00.0");
+						String lapTime = intent.getStringExtra("lapTime");
+						adapter.appendTime(lapTime);
 					}
 				}
 			}
 		};
 	}
 	
+	// if activity is destroyed, stop service
 	protected void onDestroy() {
 		super.onDestroy();
 		Intent intent = new Intent(this,TimerService.class);
 		stopService(intent);
 	}
 	
+	// when app is visible, register broadcast receiver
 	protected void onStart() {
 		super.onStart();
 		IntentFilter intentFilter = new IntentFilter();
@@ -148,6 +171,7 @@ public class MainActivity extends ActionBarActivity {
 		LocalBroadcastManager.getInstance(this).registerReceiver(receiver,intentFilter);
 	}
 	
+	// when app is invisible, unregister receiver
 	protected void onStop() {
 		super.onStop();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);

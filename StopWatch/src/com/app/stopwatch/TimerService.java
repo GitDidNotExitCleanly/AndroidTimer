@@ -116,9 +116,9 @@ public class TimerService extends Service {
 		        broadcaster.sendBroadcast(new Intent().setAction(MainActivity.RESET_ALL));
 			}
 			else {
+				long currentLapTime = lapTime;
 				lapTime = 0;
-				broadcaster.sendBroadcast(new Intent().setAction(MainActivity.RESET_LAPTIME));
-				
+				broadcaster.sendBroadcast(new Intent().setAction(MainActivity.RESET_LAPTIME).putExtra("lapTime", formatTime(currentLapTime)));
 				
 			}
 		}

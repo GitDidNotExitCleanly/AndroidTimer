@@ -1,0 +1,38 @@
+package com.app.stopwatch;
+
+import java.util.ArrayList;
+
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+public class TimerAdapter extends BaseAdapter {
+	
+	private ArrayList<String> lapTimes;
+	
+	public TimerAdapter() {
+		lapTimes = new ArrayList<String>();
+	}
+
+	@Override
+	public int getCount() {
+		return lapTimes.size();
+	}
+
+	@Override
+	public Object getItem(int index) {
+		return lapTimes.get(index);
+	}
+
+	@Override
+	public long getItemId(int index) {
+		return index;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

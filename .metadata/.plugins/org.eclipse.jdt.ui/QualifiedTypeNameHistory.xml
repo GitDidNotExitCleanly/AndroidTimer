@@ -17,9 +17,6 @@
 <fullyQualifiedTypeName name="android.R.layout"/>
 <fullyQualifiedTypeName name="android.widget.ArrayAdapter"/>
 <fullyQualifiedTypeName name="android.database.CursorJoiner.Result"/>
-<fullyQualifiedTypeName name="android.app.NotificationManager"/>
-<fullyQualifiedTypeName name="android.app.Notification"/>
-<fullyQualifiedTypeName name="android.app.PendingIntent"/>
 <fullyQualifiedTypeName name="com.example.androidapp.R.id"/>
 <fullyQualifiedTypeName name="com.example.androidapp.MyService.ServiceBinder"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
@@ -45,4 +42,9 @@
 <fullyQualifiedTypeName name="android.widget.TextView"/>
 <fullyQualifiedTypeName name="android.widget.ListView"/>
 <fullyQualifiedTypeName name="com.app.stopwatch.R.id"/>
+<fullyQualifiedTypeName name="android.app.NotificationManager"/>
+<fullyQualifiedTypeName name="android.app.Notification"/>
+<fullyQualifiedTypeName name="android.support.v4.app.NotificationCompat"/>
+<fullyQualifiedTypeName name="com.app.stopwatch.R.drawable"/>
+<fullyQualifiedTypeName name="android.app.PendingIntent"/>
 </qualifiedTypeNameHistroy>

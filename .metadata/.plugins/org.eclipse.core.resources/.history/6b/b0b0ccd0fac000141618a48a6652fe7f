@@ -1,0 +1,175 @@
+package com.example.android_phone;
+
+import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.*;
+
+
+public class MainActivity extends ActionBarActivity {
+	
+	private Button register, cancel;
+	private ToggleButton marriage;
+	private RadioButton male,female;
+	private EditText username,password;
+	private Spinner position;
+	private CheckBox reading,swimming;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_login);
+        setTitle("User Login System");
+        
+        username = (EditText)findViewById(R.id.Rusername);
+        password = (EditText)findViewById(R.id.Rpassword);
+        
+        male = (RadioButton)findViewById(R.id.Rmale);
+        female = (RadioButton)findViewById(R.id.Rfemale);
+        
+        reading = (CheckBox)findViewById(R.id.Rreading);
+        swimming = (CheckBox)findViewById(R.id.Rswimming);
+        
+        marriage = (ToggleButton)findViewById(R.id.RtoggleButton1);
+        
+        position = (Spinner)findViewById(R.id.Rposition);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this,android.R.layout.simple_spinner_item,R.array.position);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        position.setAdapter(adapter);
+        
+        register = (Button)findViewById(R.id.Rregister);
+        cancel = (Button)findViewById(R.id.Rcancel);
+        
+        register.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Bundle b = new Bundle();
+				
+				b.putString("username", username.getText().toString());
+				b.putString("password", password.getText().toString());
+				
+				if (male.isChecked()) {
+					b.putString("gender", "male");
+				}
+				else {
+					b.putString("gender", "female");
+				}
+				
+				String temp = "Hobby: ";
+				if (reading.isChecked()) {
+					temp+="reading ";
+				}
+				if (swimming.isChecked()) {
+					temp+="swimming";
+				}
+				b.putString("hobby", temp);
+				
+				if (marriage.isChecked()) {
+					b.putString("marriage", "married");
+				}
+				else {
+					b.putString("marriage", "single");
+				}
+				
+				b.putString("position", position.getSelectedItem().toString());
+				
+				Intent intent = new Intent(MainActivity.this,Result.class);
+				intent.putExtra("data", b);
+				
+				startActivity(intent);
+			}
+        });
+        
+        cancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				
+			}
+        	
+        });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.file_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        
+        switch (id) {
+        case R.id.about:
+        	aboutAlert("ABOUTABOUTABOUT");
+        	break;
+        case R.id.exit:
+        	exitAlert("EXITEXITEXITEXIT");
+        	break;
+        }
+        
+        return true;
+    }
+
+
+	private void exitAlert(String string) {
+		
+		// AlertDialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		// setting
+		builder.setMessage(string)
+				.setCancelable(false)
+				.setPositiveButton("Know", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						finish();
+					}
+				})
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+		
+		AlertDialog alert = builder.create();
+		alert.show();
+				
+	}
+
+
+	private void aboutAlert(String string) {
+		// AlertDialog
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				
+				// setting
+				builder.setMessage(string)
+						.setCancelable(false)
+						.setPositiveButton("Know", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+				
+				AlertDialog alert = builder.create();
+				alert.show();
+		
+	}
+}

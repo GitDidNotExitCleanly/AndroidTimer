@@ -1,0 +1,56 @@
+package com.example.android_phone;
+
+import java.util.ArrayList;
+
+import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class Result extends ActionBarActivity {
+
+	private ListView listView;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.result);
+		
+		Intent intent = this.getIntent();
+		Bundle b = intent.getBundleExtra("data");
+		
+		ArrayList list = new ArrayList();
+		list.add(b.getString("username"));
+		list.add(b.getString("password"));
+		list.add(b.getString("position"));
+		list.add(b.getString("gender"));
+		list.add(b.getString("hobby"));
+		list.add(b.getString("marriage"));
+		ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_checked,list);
+		
+		listView = (ListView)findViewById(R.id.RelistView1);
+		listView.setAdapter(adapter);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.result, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

@@ -3,43 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.stopwatch_fragment.MainActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context="com.example.stopwatch.MainActivity" >
     
     <fragment  
         android:id="@+id/fragment_stopwatch"  
         android:layout_width="fill_parent"  
-        android:layout_height="fill_parent"  
+        android:layout_height="wrap_content"  
         android:layout_weight="1"  
-        class="com.example.stopwatch_fragment.fragments.StopWatchFragment" />  
+        class="com.example.stopwatch.fragments.StopWatchFragment" />  
   
     <fragment  
         android:id="@+id/fragment_settings"  
         android:layout_width="fill_parent"  
-        android:layout_height="fill_parent"  
+        android:layout_height="wrap_content"  
         android:layout_weight="1"  
-        class="com.example.stopwatch_fragment.fragments.SettingsFragment" />
+        class="com.example.stopwatch.fragments.SettingsFragment" />
 
- <!--   
     <LinearLayout
-        android:id="@+id/split_action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:baselineAligned="false"
+        android:background="@drawable/menu_background"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
-
-   <!--  
+ 
         <LinearLayout
+            android:tag="stopwatch"  
             android:id="@+id/stopwatch_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingTop="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp" >
 
-            <ImageView
+            <ImageView      
                 android:id="@+id/stopwatch_menu_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,12 +55,18 @@
         </LinearLayout>
 
         <LinearLayout
+            android:tag="settings"
             android:id="@+id/settings_menu"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-           
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingTop="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp" >
 
             <ImageView
                 android:id="@+id/settings_menu_icon"
@@ -75,11 +82,8 @@
 
         </LinearLayout>
 
-  -->
-  
+ 
     </LinearLayout>
-    
--->  
     
 </LinearLayout>
 

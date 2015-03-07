@@ -1,13 +1,26 @@
-package com.example.stopwatch_fragment;
+package com.example.stopwatch;
+
+import com.example.stopwatch.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+/*
+ * MainActivity
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
 
 public class MainActivity extends ActionBarActivity {
 
@@ -15,16 +28,27 @@ public class MainActivity extends ActionBarActivity {
 	
 	private Menu_Item[] menuItems;
 	
+	private OnClickListener listener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// set up action bar
+		setActionBar();
 		
 		// set fragment
 		setFragment(0);
 		
 		// set split action bar
 		setSplitActionBar();
+	
+	}
+	
+	private void setActionBar() {
+		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);	
+		getSupportActionBar().setCustomView(R.layout.action_bar_view);
 	}
 	
 	private void setFragment(int fragmentIndex) {
@@ -42,14 +66,64 @@ public class MainActivity extends ActionBarActivity {
 	
 	private void setSplitActionBar() {
 		
+		listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String tag = String.valueOf(v.getTag());
+				if (tag.equals("stopwatch")) {
+					if (!menuItems[0].isSelected()) {
+						// initialize all options
+						getSupportFragmentManager().beginTransaction().hide(mFragments[0]).hide(mFragments[1]).commit();
+						// select the one
+						getSupportFragmentManager().beginTransaction().show(mFragments[0]).commit();				
+						
+						// initialize all options
+						menuItems[0].setSelected(false);
+						menuItems[1].setSelected(false);
+						// select the one
+						menuItems[0].setSelected(true);
+					}
+				}
+				else {
+					// settings
+					if (!menuItems[1].isSelected()) {
+						// initialize all options
+						getSupportFragmentManager().beginTransaction().hide(mFragments[0]).hide(mFragments[1]).commit();
+						// select the one
+						getSupportFragmentManager().beginTransaction().show(mFragments[1]).commit();
+					
+						// initialize all options
+						menuItems[0].setSelected(false);
+						menuItems[1].setSelected(false);
+						// select the one
+						menuItems[1].setSelected(true);
+					}
+				}
+			}
+		};
+		
 		menuItems = new Menu_Item[2];
 		
 		menuItems[0] = new Menu_Item((LinearLayout)findViewById(R.id.stopwatch_menu),(ImageView)findViewById(R.id.stopwatch_menu_icon),(TextView)findViewById(R.id.stopwatch_menu_text));
+		menuItems[0].setOnClickListener(listener);
+		menuItems[0].setSelected(true);
 		
 		menuItems[1] = new Menu_Item((LinearLayout)findViewById(R.id.settings_menu),(ImageView)findViewById(R.id.settings_menu_icon),(TextView)findViewById(R.id.settings_menu_text));
-		
+		menuItems[1].setOnClickListener(listener);
 	}
-
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+	    if ((keyCode == KeyEvent.KEYCODE_BACK))
+	    {
+	    	Intent i = new Intent(Intent.ACTION_MAIN); 
+	    	i.addCategory(Intent.CATEGORY_HOME); 
+	    	startActivity(i);
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -63,9 +137,11 @@ public class MainActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+		/*
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		*/
 		return super.onOptionsItemSelected(item);
 	}
 

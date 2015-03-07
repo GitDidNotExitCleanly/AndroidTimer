@@ -42,6 +42,7 @@ public class TimerService extends Service {
 		totalTime = 0;
 		lapTime = 0;
 		
+		// start a worker thread
 		timerHandler = new Handler();
 		timer = new Runnable() {
 			@Override
@@ -66,6 +67,7 @@ public class TimerService extends Service {
 		};
 	}
 	
+	// format the output
 	private String formatTime(long time) {
 		 int oneTenthSeconds = (int)time;
          int seconds = oneTenthSeconds / 10;
@@ -113,21 +115,24 @@ public class TimerService extends Service {
 			String action = intent.getAction();
 			
 			if (action.equals(UPDATE_TIME)) {
+				// start to update time
 				timerHandler.postDelayed(timer, 0);
 			}
 			else if (action.equals(STOP_UPDATE_TIME)) {
+				// remove call backs
 				timerHandler.removeCallbacks(timer);
 			}
 			else if (action.equals(RESET_TIME)) {
+				// set data to 0 and request UI update
 				totalTime = 0;
 				lapTime = 0;
 		        broadcaster.sendBroadcast(new Intent().setAction(StopWatchFragment.RESET_ALL));
 			}
 			else {
+				// set data to 0 and request UI update
 				long currentLapTime = lapTime;
 				lapTime = 0;
 				broadcaster.sendBroadcast(new Intent().setAction(StopWatchFragment.RESET_LAPTIME).putExtra("lapTime", formatTime(currentLapTime)));
-				
 			}
 		}
 		

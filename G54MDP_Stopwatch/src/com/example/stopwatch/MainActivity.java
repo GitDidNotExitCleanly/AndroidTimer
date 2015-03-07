@@ -47,12 +47,13 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	private void setActionBar() {
-		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		
+		// make title center
+		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);	
 		getSupportActionBar().setCustomView(R.layout.action_bar_view);
 	}
 	
 	private void setFragment(int fragmentIndex) {
+		// manage all fragments
 		mFragments = new Fragment[2];
 		
 		// StopWatch
@@ -60,11 +61,13 @@ public class MainActivity extends ActionBarActivity {
 		
 		// Settings
 		mFragments[1] = getSupportFragmentManager().findFragmentById(R.id.fragment_settings);
-	
+		
+		// display the default fragment (stopwatch)
 		getSupportFragmentManager().beginTransaction().hide(mFragments[0]).hide(mFragments[1]).commit();
 		getSupportFragmentManager().beginTransaction().show(mFragments[fragmentIndex]).commit();	
 	}
 	
+	// set up the bottom menu and listener
 	private void setSplitActionBar() {
 		
 		listener = new OnClickListener() {
@@ -103,6 +106,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		};
 		
+		// group relevant views and set up listeners
 		menuItems = new Menu_Item[2];
 		
 		menuItems[0] = new Menu_Item((LinearLayout)findViewById(R.id.stopwatch_menu),(ImageView)findViewById(R.id.stopwatch_menu_icon),(TextView)findViewById(R.id.stopwatch_menu_text));
@@ -113,6 +117,7 @@ public class MainActivity extends ActionBarActivity {
 		menuItems[1].setOnClickListener(listener);
 	}
 	
+	// deal with back button
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
@@ -125,6 +130,7 @@ public class MainActivity extends ActionBarActivity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
+	// not used in this program (I use a custom menu)
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

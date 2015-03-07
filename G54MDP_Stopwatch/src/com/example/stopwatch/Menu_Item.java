@@ -41,6 +41,7 @@ public class Menu_Item {
 		return this.icon;
 	}
 	
+	// if it is selected, change text color and background alpha
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 		if (isSelected) {
@@ -61,6 +62,7 @@ public class Menu_Item {
 		return this.menu_description;
 	}
 	
+	// set listener for the container (linearLayout)
 	public void setOnClickListener(OnClickListener listener) {
 		this.container.setOnClickListener(listener);
 	}

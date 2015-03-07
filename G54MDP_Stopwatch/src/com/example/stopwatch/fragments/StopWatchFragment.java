@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 public class StopWatchFragment extends Fragment {
 	
-	// broadcast receiver required action
+	//  actions broadcast receiver required
 	public final static String UPDATE_UI = "com.example.stopwatch.fragments.action.UPDATE_UI";
 	public final static String RESET_ALL = "com.example.stopwatch.fragments.action.RESET_ALL";
 	public final static String RESET_LAPTIME = "com.example.stopwatch.fragments.action.RESET_LAPTIME";
@@ -156,7 +156,7 @@ public class StopWatchFragment extends Fragment {
 		listView.setAdapter(adapter);
 	}
 	
-	// update time
+	// broadcast receiver --- update time
 	private void createBroadcastReceiver() {
 		receiver = new BroadcastReceiver() {
 			@Override
@@ -187,18 +187,18 @@ public class StopWatchFragment extends Fragment {
 		};
 	}
 	
+	// set up notification
 	private void createNotification() {
 		
 		running = false;
 		
 		settings = getActivity().getPreferences(Context.MODE_PRIVATE);
-		
-		getActivity();
+
 		nm = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationBuilder = new NotificationCompat.Builder(getActivity());
 		notificationBuilder.setContentTitle("StopWatch In Operation ...");
 		notificationBuilder.setContentText("Click to open StopWatch");
-		notificationBuilder.setSmallIcon(R.drawable.ic_launcher);
+		notificationBuilder.setSmallIcon(R.drawable.stopwatch);
 		notificationBuilder.setContentIntent(PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), MainActivity.class), 0));
 	}
 
@@ -210,6 +210,7 @@ public class StopWatchFragment extends Fragment {
 		Intent intent = new Intent(getActivity(),TimerService.class);
 		getActivity().stopService(intent);
 		
+		// if there is notification, cancel it
 		settingOn = settings.getBoolean("do_not_notify", false);
 		if (running && !settingOn) {
 			// cancel notification
@@ -228,6 +229,7 @@ public class StopWatchFragment extends Fragment {
 		intentFilter.addAction(RESET_LAPTIME);
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver,intentFilter);
 		
+		// if there is notification, cancel it
 		settingOn = settings.getBoolean("do_not_notify", false);
 		if (running && !settingOn) {
 			// cancel notification
@@ -241,6 +243,7 @@ public class StopWatchFragment extends Fragment {
 		super.onStop();
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
 		
+		// if app is invisible and stopwatch is running, set notification
 		settingOn = settings.getBoolean("do_not_notify", false);
 		if (running && !settingOn) {
 			// set notification

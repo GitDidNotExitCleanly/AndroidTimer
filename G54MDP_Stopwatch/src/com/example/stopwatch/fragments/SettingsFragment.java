@@ -24,7 +24,8 @@ import android.widget.ToggleButton;
 public class SettingsFragment extends Fragment {
 	
 	private SharedPreferences settings;
-
+	
+	// widgets
 	private ToggleButton do_not_notify;
 	
 	public final static int record_number_min = 10;
@@ -56,15 +57,17 @@ public class SettingsFragment extends Fragment {
 	}
 	
 	private void loadData() {
-		
+		// set toggle button
 		boolean do_not_notify = settings.getBoolean("do_not_notify", false);
 		this.do_not_notify.setChecked(do_not_notify);
 		
+		// set seek bar
 		int record_number = settings.getInt("record_number", (record_number_max-record_number_min)/2);
 		this.record_number_seekbar.setMax(record_number_max-record_number_min);
 		this.record_number_seekbar.setProgress(record_number);
 	}
 	
+	// set up listeners for toggle button and seek bar
 	private void setListener() {
 		this.do_not_notify.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 

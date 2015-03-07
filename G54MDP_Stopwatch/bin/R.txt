@@ -340,7 +340,9 @@ int drawable ic_launcher 0x7f020034
 int drawable listview_background 0x7f020035
 int drawable menu_background 0x7f020036
 int drawable menu_item_selected 0x7f020037
-int drawable settings_border 0x7f020038
+int drawable settings 0x7f020038
+int drawable settings_border 0x7f020039
+int drawable stopwatch 0x7f02003a
 int id action_bar 0x7f090031
 int id action_bar_activity_content 0x7f090003
 int id action_bar_container 0x7f090030

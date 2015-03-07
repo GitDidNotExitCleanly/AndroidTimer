@@ -4,6 +4,7 @@ import com.example.stopwatch.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,12 +27,21 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// set up action bar
+		setActionBar();
+		
 		// set fragment
 		setFragment(0);
 		
 		// set split action bar
 		setSplitActionBar();
 	
+	}
+	
+	private void setActionBar() {
+		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		
+		getSupportActionBar().setCustomView(R.layout.action_bar_view);
 	}
 	
 	private void setFragment(int fragmentIndex) {
@@ -109,9 +119,11 @@ public class MainActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+		/*
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		*/
 		return super.onOptionsItemSelected(item);
 	}
 

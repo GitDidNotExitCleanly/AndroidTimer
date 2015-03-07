@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.example.android_phone.R.id"/>
 <fullyQualifiedTypeName name="android.provider.Contacts.People"/>
 <fullyQualifiedTypeName name="android.database.Cursor"/>
 <fullyQualifiedTypeName name="android.widget.ListAdapter"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="com.example.stopwatch.R.dimen"/>
 <fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.layout"/>
+<fullyQualifiedTypeName name="android.app.ActionBar"/>
 </qualifiedTypeNameHistroy>

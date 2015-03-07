@@ -8,9 +8,9 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:background="@drawable/background" >
 
 	        <TextView
 	            android:id="@+id/smallTime"
@@ -18,8 +18,9 @@
 	            android:layout_height="wrap_content"
 	            android:text="00:00.0"
 	            android:textSize="@dimen/stopwatch_small_time"
-	            android:paddingTop="15dip"
-	            android:paddingBottom="5dip" />
+	            android:textColor="#fff"
+	            android:layout_marginBottom="0dp"
+	            android:paddingTop="5dp" />
 	
 	        <TextView
 	            android:id="@+id/largeTime"
@@ -27,29 +28,33 @@
 	            android:layout_height="wrap_content"
 	            android:text="00:00.0"
 	            android:textSize="@dimen/stopwatch_large_time"
-	            android:paddingTop="5dip"
-	            android:paddingBottom="15dip" />
+	            android:textColor="#fff"
+	            android:paddingBottom="5dp" />
 	
 	        <LinearLayout
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:gravity="center_horizontal"
 	            android:orientation="horizontal"
-	             >
+	            android:layout_marginBottom="10dp" >
 	
 	            <Button
 	                android:id="@+id/start_stop"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
-	                android:text="Start" />
+	                android:text="Start"
+	                android:layout_marginLeft="15dp"
+	                android:layout_marginRight="10dp" />
 	
 	            <Button
 	                android:id="@+id/reset_lap"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
-	                android:text="Reset" />
+	                android:text="Reset"
+	                android:layout_marginLeft="10dp"
+	                android:layout_marginRight="15dp" />
 	
 	        </LinearLayout>
     </LinearLayout>
@@ -58,8 +63,7 @@
         android:id="@+id/timeList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.3" >
+        android:layout_gravity="center_horizontal" >
 
     </ListView>
 

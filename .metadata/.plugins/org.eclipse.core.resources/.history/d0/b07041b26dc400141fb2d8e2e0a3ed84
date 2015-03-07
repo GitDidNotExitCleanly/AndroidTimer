@@ -1,0 +1,231 @@
+package com.example.stopwatch.fragments;
+
+import com.example.stopwatch.*;
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+public class StopWatchFragment extends Fragment {
+	
+	// broadcast receiver required action
+	public final static String UPDATE_UI = "com.example.stopwatch.fragments.action.UPDATE_UI";
+	public final static String RESET_ALL = "com.example.stopwatch.fragments.action.RESET_ALL";
+	public final static String RESET_LAPTIME = "com.example.stopwatch.fragments.action.RESET_LAPTIME";
+	
+	// local broadcast receiver
+	private BroadcastReceiver receiver;
+
+	// notification
+	private NotificationManager nm;
+	private NotificationCompat.Builder notificationBuilder;
+	private final int notificationID = 1;
+	private boolean running;
+
+	// widgets
+	private TextView largeTime;
+	private TextView smallTime;
+	
+	private Button start_stop;
+	private Button reset_lap;
+	
+	private ListView listView;
+	private TimerAdapter adapter;
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		// set up UI and listener
+		setupUI();
+		
+		// create broadcast receiver
+		createBroadcastReceiver();
+		
+		// set up notification
+		createNotification();
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_stopwatch, container,false);
+	}
+	
+	private void setupUI() {
+
+		// textview
+		largeTime = (TextView)getActivity().findViewById(R.id.largeTime);
+		smallTime = (TextView)getActivity().findViewById(R.id.smallTime);
+		
+		// start/stop button
+		start_stop = (Button)getActivity().findViewById(R.id.start_stop);
+		start_stop.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String btnText = start_stop.getText().toString();
+				if (btnText.equals("Start")) {
+					// start service
+					Intent intent = new Intent(getActivity(),TimerService.class);
+					intent.setAction(TimerService.UPDATE_TIME);
+					getActivity().startService(intent);
+					
+					// change running state
+					running = true;
+					
+					// change button
+					start_stop.setText("Stop");
+					reset_lap.setEnabled(true);
+					reset_lap.setText("Lap");
+				}
+				else {
+					// start service
+					Intent intent = new Intent(getActivity(),TimerService.class);
+					intent.setAction(TimerService.STOP_UPDATE_TIME);
+					getActivity().startService(intent);
+					
+					// change running state
+					running = false;
+					
+					// change button
+					start_stop.setText("Start");
+					reset_lap.setEnabled(true);
+					reset_lap.setText("Reset");
+				}
+			}
+		});
+		
+		// reset/lap button
+		reset_lap = (Button)getActivity().findViewById(R.id.reset_lap);
+		reset_lap.setEnabled(false);	
+		reset_lap.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String btnText = reset_lap.getText().toString();
+				if (btnText.equals("Reset")) {
+					// start service
+					Intent intent = new Intent(getActivity(),TimerService.class);
+					intent.setAction(TimerService.RESET_TIME);
+					getActivity().startService(intent);
+					
+					// change button
+					reset_lap.setEnabled(false);
+				}
+				else {
+					// start service
+					if (adapter.getCount() < 20) {
+						Intent intent = new Intent(getActivity(),TimerService.class);
+						intent.setAction(TimerService.LAP);
+						getActivity().startService(intent);
+						
+						if (adapter.getCount() == 19) {
+							reset_lap.setEnabled(false);
+						}
+					}
+				}
+			}
+		});
+
+		// listview
+		listView = (ListView)getActivity().findViewById(R.id.timeList);
+		adapter = new TimerAdapter(getActivity());	
+		listView.setAdapter(adapter);
+	}
+	
+	// update time
+	private void createBroadcastReceiver() {
+		receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context ctx, Intent intent) {
+				
+				String action = intent.getAction();
+				
+				if (action.equals(UPDATE_UI)) {
+					String totalTime = intent.getStringExtra("totalTime");
+					largeTime.setText(totalTime);
+					
+					String lapTime = intent.getStringExtra("lapTime");
+					smallTime.setText(lapTime);
+				}
+				else {
+					if (action.equals(RESET_ALL)) {
+						largeTime.setText("00:00.0");
+						smallTime.setText("00:00.0");
+						adapter.clearTime();
+					}
+					else {
+						smallTime.setText("00:00.0");
+						String lapTime = intent.getStringExtra("lapTime");
+						adapter.appendTime(lapTime);
+					}
+				}
+			}
+		};
+	}
+	
+	private void createNotification() {
+		
+		running = false;
+		getActivity();
+		nm = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationBuilder = new NotificationCompat.Builder(getActivity());
+		notificationBuilder.setContentTitle("StopWatch In Operation ...");
+		notificationBuilder.setContentText("Click to open StopWatch");
+		notificationBuilder.setSmallIcon(R.drawable.ic_launcher);
+		notificationBuilder.setContentIntent(PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), MainActivity.class), 0));
+	
+	}
+
+	// if activity is destroyed, stop service
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		Intent intent = new Intent(getActivity(),TimerService.class);
+		getActivity().stopService(intent);
+	}
+	
+	// when app is visible, register broadcast receiver
+	@Override
+	public void onStart() {
+		super.onStart();
+	
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(UPDATE_UI);
+		intentFilter.addAction(RESET_ALL);
+		intentFilter.addAction(RESET_LAPTIME);
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver,intentFilter);
+
+		if (running == true) {
+			// cancel notification
+			nm.cancel(notificationID);
+		}
+	}
+	
+	// when app is invisible, unregister receiver
+	public void onStop() {
+		super.onStop();
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+
+		if (running == true) {
+			// set notification
+			nm.notify(notificationID, notificationBuilder.build());
+		}
+	}
+}

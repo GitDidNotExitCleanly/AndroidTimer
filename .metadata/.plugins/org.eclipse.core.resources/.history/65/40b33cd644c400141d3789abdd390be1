@@ -1,0 +1,40 @@
+package com.example.stopwatch_fragment;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.LinearLayout;
+
+
+public class BottomMenu extends LinearLayout {
+
+	private View[] menuItems;
+	
+	private static final String TAG_STOPWATCH_ICON = "stopwatch_icon";
+	private static final String TAG_STOPWATCH_TEXT = "stopwatch_text";
+	
+	private static final String TAG_SETTINGS_ICON = "settings_icon";
+	private static final String TAG_SETTINGS_TEXT = "settings_text";
+	
+	
+	
+	public BottomMenu(Context context) {
+		super(context);
+		setOrientation(LinearLayout.HORIZONTAL);  
+		
+	}
+	
+	public BottomMenu(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		setOrientation(LinearLayout.HORIZONTAL);  
+	}
+
+	
+	
+}

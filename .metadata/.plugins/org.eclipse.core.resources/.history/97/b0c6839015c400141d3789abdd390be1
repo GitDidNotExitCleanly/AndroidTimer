@@ -1,0 +1,56 @@
+package com.example.stopwatch_fragment.fragments;
+
+import android.R;
+import android.content.Context;
+import android.graphics.Color;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.view.View.OnClickListener;
+
+public class SplitActionBar extends LinearLayout implements OnClickListener {
+
+	private int mDefaultIndicator = 0;
+	
+	private static int mCurrentIndicator;
+	
+	private static View[] mIndicators;
+	
+	private OnIndicateListener mOnIndicateListener;
+	
+	private static final String TAG_ICON_STOPWATCH = "ic_launcher";
+	private static final String TAG_ICON_SETTING = "ic_launcher";
+	
+	private static final String TAG_TEXT_STOPWATCH = "ic_launcher";
+	private static final String TAG_TEXT_SETTING = "ic_launcher";
+	
+	private static final int COLOR_UNSELECT = Color.argb(100, 0xff, 0xff, 0xff);
+	private static final int COLOR_SELECT = Color.WHITE;
+	
+	public SplitActionBar(Context context) {
+		super(context);
+	}
+	
+	public SplitActionBar(Context context,AttributeSet attrs) {
+		super(context,attrs);
+		
+		mCurrentIndicator = mDefaultIndicator;
+		setOrientation(LinearLayout.HORIZONTAL);
+		init();
+	}
+	
+	private void init() {
+		mIndicators = new View[2];
+		
+		// StopWatch
+		mIndicators[0] = createIndicator(R.drawable.ic_launcher);
+	}
+	
+	
+
+	@Override
+	public void onClick(View v) {
+		
+		
+	}
+}

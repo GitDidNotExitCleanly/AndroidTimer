@@ -1,0 +1,25 @@
+package com.example.stopwatch_fragment;
+
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class Menu_Item {
+	
+	private ImageView icon;
+	
+	private TextView menu_description;
+	
+	public Menu_Item(ImageView icon,TextView textView) {
+		this.icon = icon;
+		this.menu_description = textView;
+	}
+	
+	public ImageView getIcon() {
+		return this.icon;
+	}
+	
+	public TextView getTextView() {
+		return this.menu_description;
+	}
+	
+}

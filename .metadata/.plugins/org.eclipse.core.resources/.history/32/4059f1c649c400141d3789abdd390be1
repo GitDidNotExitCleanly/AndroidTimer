@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.stopwatch_fragment.MainActivity" >
+    
+    <fragment  
+        android:id="@+id/fragment_stopwatch"  
+        android:layout_width="fill_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_weight="1"  
+        class="com.example.stopwatch_fragment.fragments.StopWatchFragment" />  
+  
+    <fragment  
+        android:id="@+id/fragment_settings"  
+        android:layout_width="fill_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_weight="1"  
+        class="com.example.stopwatch_fragment.fragments.SettingsFragment" />
+
+    <LinearLayout
+        android:tag="1"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+ 
+        <LinearLayout
+            android:tag="2"
+            
+            android:id="@+id/stopwatch_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:tag="3"
+                
+                android:id="@+id/stopwatch_menu_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:tag="4"
+                
+                android:id="@+id/stopwatch_menu_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stopwatch" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:tag="5"
+            
+            android:id="@+id/settings_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:tag="6"
+                
+                android:id="@+id/settings_menu_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:tag="7"
+                
+                android:id="@+id/settings_menu_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings" />
+
+        </LinearLayout>
+
+ 
+    </LinearLayout>
+    
+</LinearLayout>
+

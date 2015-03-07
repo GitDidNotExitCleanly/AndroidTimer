@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+	
+    <dimen name="stopwatch_large_time">65dp</dimen><dimen name="stopwatch_small_time">35dp</dimen>
+    <dimen name="button_green">#7CCD7C</dimen>
+    <dimen name="button_gray">#B9B9B9</dimen>
+    <dimen name="button_red">#EE2C2C</dimen>
+    
+</resources>

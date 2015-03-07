@@ -8,7 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -20,6 +20,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+/*
+ * Stopwatch page fragment
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
 
 public class StopWatchFragment extends Fragment {
 	
@@ -36,6 +42,10 @@ public class StopWatchFragment extends Fragment {
 	private NotificationCompat.Builder notificationBuilder;
 	private final int notificationID = 1;
 	private boolean running;
+	private boolean settingOn;
+	
+	// setting preference
+	private SharedPreferences settings;
 
 	// widgets
 	private TextView largeTime;
@@ -130,14 +140,11 @@ public class StopWatchFragment extends Fragment {
 				}
 				else {
 					// start service
-					if (adapter.getCount() < 20) {
+					int max_record = SettingsFragment.record_number_min + settings.getInt("record_number", (SettingsFragment.record_number_max+SettingsFragment.record_number_min)/2);
+					if (adapter.getCount() < max_record) {
 						Intent intent = new Intent(getActivity(),TimerService.class);
 						intent.setAction(TimerService.LAP);
 						getActivity().startService(intent);
-						
-						if (adapter.getCount() == 19) {
-							reset_lap.setEnabled(false);
-						}
 					}
 				}
 			}
@@ -183,6 +190,9 @@ public class StopWatchFragment extends Fragment {
 	private void createNotification() {
 		
 		running = false;
+		
+		settings = getActivity().getPreferences(Context.MODE_PRIVATE);
+		
 		getActivity();
 		nm = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationBuilder = new NotificationCompat.Builder(getActivity());
@@ -190,7 +200,6 @@ public class StopWatchFragment extends Fragment {
 		notificationBuilder.setContentText("Click to open StopWatch");
 		notificationBuilder.setSmallIcon(R.drawable.ic_launcher);
 		notificationBuilder.setContentIntent(PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), MainActivity.class), 0));
-	
 	}
 
 	// if activity is destroyed, stop service
@@ -200,6 +209,12 @@ public class StopWatchFragment extends Fragment {
 		
 		Intent intent = new Intent(getActivity(),TimerService.class);
 		getActivity().stopService(intent);
+		
+		settingOn = settings.getBoolean("do_not_notify", false);
+		if (running && !settingOn) {
+			// cancel notification
+			nm.cancel(notificationID);
+		}
 	}
 	
 	// when app is visible, register broadcast receiver
@@ -212,19 +227,22 @@ public class StopWatchFragment extends Fragment {
 		intentFilter.addAction(RESET_ALL);
 		intentFilter.addAction(RESET_LAPTIME);
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver,intentFilter);
-
-		if (running == true) {
+		
+		settingOn = settings.getBoolean("do_not_notify", false);
+		if (running && !settingOn) {
 			// cancel notification
 			nm.cancel(notificationID);
 		}
 	}
 	
 	// when app is invisible, unregister receiver
+	@Override
 	public void onStop() {
 		super.onStop();
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
-
-		if (running == true) {
+		
+		settingOn = settings.getBoolean("do_not_notify", false);
+		if (running && !settingOn) {
 			// set notification
 			nm.notify(notificationID, notificationBuilder.build());
 		}

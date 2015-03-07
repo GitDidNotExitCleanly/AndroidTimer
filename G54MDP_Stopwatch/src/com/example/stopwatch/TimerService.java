@@ -8,6 +8,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+/*
+ * stopwatch service
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
+
 public class TimerService extends Service {
 	// actions service can perform
 	public static final String UPDATE_TIME = "com.example.stopwatch.action.UPDATE_TIME";

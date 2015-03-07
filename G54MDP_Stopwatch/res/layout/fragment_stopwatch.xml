@@ -63,7 +63,8 @@
         android:id="@+id/timeList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
+        android:layout_gravity="center_horizontal"
+        android:transcriptMode="alwaysScroll" >
 
     </ListView>
 

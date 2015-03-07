@@ -8,6 +8,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/*
+ * Custom data structure for the menu item
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
+
 public class Menu_Item {
 	
 	private LinearLayout container;

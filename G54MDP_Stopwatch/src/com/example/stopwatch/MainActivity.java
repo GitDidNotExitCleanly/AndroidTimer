@@ -5,7 +5,9 @@ import com.example.stopwatch.R;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,12 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+/*
+ * MainActivity
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
 
 public class MainActivity extends ActionBarActivity {
 
@@ -105,7 +113,18 @@ public class MainActivity extends ActionBarActivity {
 		menuItems[1].setOnClickListener(listener);
 	}
 	
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+	    if ((keyCode == KeyEvent.KEYCODE_BACK))
+	    {
+	    	Intent i = new Intent(Intent.ACTION_MAIN); 
+	    	i.addCategory(Intent.CATEGORY_HOME); 
+	    	startActivity(i);
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

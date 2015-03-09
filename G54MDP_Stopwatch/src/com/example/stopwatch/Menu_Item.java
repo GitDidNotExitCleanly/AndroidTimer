@@ -45,11 +45,23 @@ public class Menu_Item {
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 		if (isSelected) {
-			this.container.setBackgroundResource(R.drawable.menu_item_selected);
+			this.container.setBackgroundColor(Color.argb(20, 255, 255, 255));
+			if (String.valueOf(this.icon.getTag()).equals("stopwatch")) {
+				this.icon.setImageResource(R.drawable.stopwatch);
+			}
+			if (String.valueOf(this.icon.getTag()).equals("settings")) {
+				this.icon.setImageResource(R.drawable.settings);
+			}
 			this.menu_description.setTextColor(Color.WHITE);
 		}
 		else {
 			this.container.setBackgroundColor(Color.alpha(0));
+			if (String.valueOf(this.icon.getTag()).equals("stopwatch")) {
+				this.icon.setImageResource(R.drawable.stopwatch_not_selected);
+			}
+			if (String.valueOf(this.icon.getTag()).equals("settings")) {
+				this.icon.setImageResource(R.drawable.settings_not_selected);
+			}
 			this.menu_description.setTextColor(Color.argb(100, 0xff, 0xff, 0xff));
 		}
 	}

@@ -1,0 +1,70 @@
+package com.example.stopwatch;
+
+import com.example.stopwatch.R;
+
+import android.graphics.Color;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+/*
+ * Custom data structure for the menu item
+ * 
+ * @author Sheng Wang (psysw1@nottingham.ac.uk)
+ * */
+
+public class Menu_Item {
+	
+	private LinearLayout container;
+	
+	private ImageView icon;
+	
+	private TextView menu_description;
+	
+	private boolean isSelected;
+	
+	public Menu_Item(LinearLayout container,ImageView icon,TextView textView) {
+		this.container = container;	
+		this.container.setBackgroundColor(Color.alpha(0));
+		this.icon = icon;
+		this.menu_description = textView;
+		this.menu_description.setTextColor(Color.argb(100, 0xff, 0xff, 0xff));
+		this.isSelected = false;
+	}
+
+	public LinearLayout getContainer() {
+		return this.container;
+	}
+	
+	public ImageView getIcon() {
+		return this.icon;
+	}
+	
+	// if it is selected, change text color and background alpha
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+		if (isSelected) {
+			//this.container.setBackgroundResource(R.drawable.menu_item_selected);
+			this.container.setBackgroundColor(Color.argb(20, 255, 255, 255));
+			this.menu_description.setTextColor(Color.WHITE);
+		}
+		else {
+			this.container.setBackgroundColor(Color.alpha(0));
+			this.menu_description.setTextColor(Color.argb(100, 0xff, 0xff, 0xff));
+		}
+	}
+	
+	public boolean isSelected() {
+		return this.isSelected;
+	}
+	
+	public TextView getTextView() {
+		return this.menu_description;
+	}
+	
+	// set listener for the container (linearLayout)
+	public void setOnClickListener(OnClickListener listener) {
+		this.container.setOnClickListener(listener);
+	}
+}

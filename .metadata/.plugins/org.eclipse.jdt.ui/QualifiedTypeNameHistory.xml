@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.example.androidprogram.R.layout"/>
 <fullyQualifiedTypeName name="android.database.CursorJoiner.Result"/>
 <fullyQualifiedTypeName name="com.example.androidapp.R.id"/>
 <fullyQualifiedTypeName name="com.example.androidapp.MyService.ServiceBinder"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="android.widget.ArrayAdapter"/>
 <fullyQualifiedTypeName name="android.view.KeyEvent"/>
 <fullyQualifiedTypeName name="android.content.Intent"/>
+<fullyQualifiedTypeName name="com.example.stopwatch.R.drawable"/>
 </qualifiedTypeNameHistroy>
